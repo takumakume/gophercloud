@@ -7,7 +7,9 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 )
@@ -348,6 +350,14 @@ func (client *ProviderClient) doRequest(method, url string, options *RequestOpts
 
 	if options.RawBody != nil {
 		body = options.RawBody
+	}
+
+	if os.Getenv("GOPHERCLOUD_DEBUG") != "" {
+		log.Print("[gophercloud] ===========================================")
+		log.Printf("[gophercloud] Request URL: %s", url)
+		log.Printf("[gophercloud] Request Method: %s", method)
+		log.Printf("[gophercloud] Request Body: %s", body)
+		log.Print("[gophercloud] ===========================================")
 	}
 
 	// Construct the http.Request.
